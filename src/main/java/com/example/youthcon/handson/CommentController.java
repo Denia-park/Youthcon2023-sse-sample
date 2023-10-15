@@ -26,4 +26,10 @@ public class CommentController {
         return ResponseEntity.ok(emitter);
     }
 
+    @PostMapping(value = "/comment")
+    public ResponseEntity<Void> sendComment(@RequestBody Comment comment, @RequestParam("articleId") String articleId) {
+        commentService.sendComment(comment, articleId);
+        return ResponseEntity.ok().build();
+    }
+
 }
