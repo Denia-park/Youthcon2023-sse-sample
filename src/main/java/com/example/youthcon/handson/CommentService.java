@@ -23,13 +23,13 @@ public class CommentService {
         // 새로운 이미터 생성
         //  - 타임아웃이 길면, 서버에서 관리해야 할 OverHead 증가
         //  - 타임아웃이 짧으면, 재연결 요청이 증가
-        final SseEmitter sseEmitter = new SseEmitter(5 * 60 * 1000L ); //5분으로 생성
+        final SseEmitter sseEmitter = new SseEmitter(1000L );
 
         // 전송할 이벤트를 작성
         final SseEmitter.SseEventBuilder sseEventBuilder = SseEmitter.event()
                 .name("connect")
                 .data("connected!!")
-                .reconnectTime(3000L);
+                .reconnectTime(500L);
 
         // 작성한 이벤트를 생성한 이미터에 전송
         sendEvent(sseEmitter, sseEventBuilder);
