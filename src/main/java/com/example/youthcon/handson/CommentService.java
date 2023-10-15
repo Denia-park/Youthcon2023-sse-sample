@@ -23,13 +23,15 @@ public class CommentService {
         // 새로운 이미터 생성
         //  - 타임아웃이 길면, 서버에서 관리해야 할 OverHead 증가
         //  - 타임아웃이 짧으면, 재연결 요청이 증가
-        final SseEmitter sseEmitter = new SseEmitter(1000L );
+        final SseEmitter sseEmitter = new SseEmitter(5 * 60 * 1000L);
+        //시간이 1초밖에 되지 않기때문에, 금방 만료가 되는데 container에서 만료된 SSE를 제거하지 않고 그대로 가지고 있기 때문에 forEach를 돌 때 예외가 발생한다.
+        //그래서 만료됐을때 처리할 CallBack 함수를 추가해줘야 한다. // sseEmitter.onCompletion();
 
         // 전송할 이벤트를 작성
         final SseEmitter.SseEventBuilder sseEventBuilder = SseEmitter.event()
                 .name("connect")
                 .data("connected!!")
-                .reconnectTime(500L);
+                .reconnectTime(3 * 1000L);
 
         // 작성한 이벤트를 생성한 이미터에 전송
         sendEvent(sseEmitter, sseEventBuilder);
