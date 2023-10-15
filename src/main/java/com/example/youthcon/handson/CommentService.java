@@ -51,4 +51,16 @@ public class CommentService {
         }
     }
 
+    public void sendComment(final Comment comment, final String articleId) {
+        //아티클과 연결된 이미터들을 모두 가져오기
+        final Set<SseEmitter> sseEmitters = container.getOrDefault(articleId, new HashSet<>());
+
+        //가져온 이미터들에게 댓글을 전송하기
+        final SseEmitter.SseEventBuilder sseEventBuilder = SseEmitter.event()
+                .name("newComment")
+                .data(comment)
+                .reconnectTime(3000L);
+
+        sseEmitters.forEach(sseEmitter -> sendEvent(sseEmitter, sseEventBuilder));
+    }
 }
